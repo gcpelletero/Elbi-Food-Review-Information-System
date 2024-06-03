@@ -55,7 +55,7 @@ INSERT INTO food_ingredient VALUES (3, 'Thinly Sliced Pork');
 INSERT INTO meat VALUES (3, 'Poultry', NULL, 'Breast');
 INSERT INTO vegetable VALUES (3, 'Root');
 
-INSERT INTO USERS VALUES ('ramnick_francis', 'john@example.com', 'password123', 'Hello, I''m John Doe!', '1990-01-01', 31, 'John', 'Doe', 'Doe');
+INSERT INTO USERS VALUES ('john_doe', 'john@example.com', 'password123', 'Hello, I''m John Doe!', '1990-01-01', 31, 'John', 'Doe', 'Doe');
 INSERT INTO USERS VALUES ('jane_doe', 'jane@example.com', 'password123', 'Hello, I''m Jane Doe!', '1990-01-01', 31, 'Jane', 'Doe', 'Doe');
 
 INSERT INTO is_food_reviewed_by VALUES ('john_doe', 1, 1, '2021-01-01', 'This is a delicious dish!', 4.8);

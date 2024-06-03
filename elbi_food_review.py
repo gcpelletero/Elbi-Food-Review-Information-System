@@ -2,24 +2,25 @@ import sys
 
 import mysql.connector #For connecting to mariaDB
 
+# connect to the MariaDB database
 mariaDBConnect = mysql.connector.connect(
   host="localhost",  
-  user="root",  
+  user="root",  #username to use for authentication
   password="ilovecmsc127",  
-  database="elbi_food_review"
+  database="elbi_food_review" #name of the database
 )
 
 cursor = mariaDBConnect.cursor()
 
+#global variables for logged-in user information
 global userLoggedInUserName
 global foodEstabLoggedInID
 
-    
 
 def horizontalLine():
     print("~-~-~-~-~-~-~-~-")
 
-
+# creates a new account: a new user or new food establishment
 def signUp():
     print("\n")
     horizontalLine()
@@ -684,7 +685,7 @@ def justFoodItemShowerFromEstab(establishment_id):
             print("%s\t%s" % (foodItem[0], foodItem[1]))
     
 
-
+#adds a food review
 def rateFoodItem():
 # MariaDB [elbi_food_review]> desc is_food_reviewed_by;
 # +------------------+---------------+------+-----+---------+-------+
@@ -991,8 +992,8 @@ def restoReviewShower(restoReviews):
         print("Comment: ", restoReview[3])
         print("Rating: ", restoReview[4])
 
+#updates a food review
 def editComments():
-
     print("Edit Comments")
     print("Choose what to edit:")
     print("[1] Edit Comment for Food Item")
@@ -1108,7 +1109,7 @@ def menuUser():
             print("Invalid choice. Please try again.")
             menuUser()
     
-
+#  add, update or delete a food review, login as user
 def loginAsUser():
     print("\n")
     print("Login as User")
@@ -1127,6 +1128,7 @@ def loginAsUser():
         print("Login failed. Please try again.")
         loginAsUser()
 
+# adding, deleting or updating a food establishment or food item, login as food establishment
 def loginAsFoodEstab():
     print("\n")
     print("Login as Food Establishment")
@@ -1825,11 +1827,13 @@ def editRestaurantProfile():
         cursor.execute("UPDATE Food_Establishment SET Type = %s WHERE Establishment_id = %s", (type, foodEstabLoggedInID))
         mariaDBConnect.commit()
     elif choice == 5:
+        print("\n")
         print("Social Media Links")
         cursor.execute("SELECT * FROM Food_Establishment_Social_Media_Link WHERE Establishment_id = %s", (foodEstabLoggedInID,))
         social_media_links = cursor.fetchall()
         for social_media_link in social_media_links:
             print(social_media_link[1])
+        print("\n")    
         print("Choose what to update:")
         print("[1] Add Social Media Link")
         print("[2] Delete Social Media Link")
@@ -1853,11 +1857,13 @@ def editRestaurantProfile():
             editRestaurantProfile()
         
     elif choice == 6:
+        print("\n")
         print("Contact Numbers")
         cursor.execute("SELECT * FROM Food_Establishment_Contact WHERE Establishment_id = %s", (foodEstabLoggedInID,))
         contact_numbers = cursor.fetchall()
         for contact_number in contact_numbers:
             print(contact_number[1])
+        print("\n")
         print("Choose what to update:")
         print("[1] Add Contact Number")
         print("[2] Delete Contact Number")
@@ -1865,27 +1871,29 @@ def editRestaurantProfile():
         choice = int(input("Enter choice: "))
         if choice == 1:
             contact_number = input("Enter Contact Number: ")
-            cursor.execute("INSERT INTO Food_Establishment_Contact (Establishment_id, Contact_number) VALUES (%s, %s)", (foodEstabLoggedInID, contact_number))
+            cursor.execute("INSERT INTO Food_Establishment_Contact (Establishment_id, Contact) VALUES (%s, %s)", (foodEstabLoggedInID, contact_number))
             mariaDBConnect.commit()
         elif choice == 2:
             contact_number = input("Enter Contact Number to delete: ")
-            cursor.execute("DELETE FROM Food_Establishment_Contact WHERE Establishment_id = %s AND Contact_number = %s", (foodEstabLoggedInID, contact_number))
+            cursor.execute("DELETE FROM Food_Establishment_Contact WHERE Establishment_id = %s AND Contact = %s", (foodEstabLoggedInID, contact_number))
             mariaDBConnect.commit()
         elif choice == 3:
             contact_number = input("Enter Contact Number to edit: ")
             new_contact_number = input("Enter New Contact Number: ")
-            cursor.execute("UPDATE Food_Establishment_Contact SET Contact_number = %s WHERE Establishment_id = %s AND Contact_number = %s", (new_contact_number, foodEstabLoggedInID, contact_number))
+            cursor.execute("UPDATE Food_Establishment_Contact SET Contact = %s WHERE Establishment_id = %s AND Contact= %s", (new_contact_number, foodEstabLoggedInID, contact_number))
             mariaDBConnect.commit()
 
         else:
             print("Invalid choice. Please try again.")
             editRestaurantProfile()
     elif choice == 7:
+        print("\n")
         print("Branch Locations")
         cursor.execute("SELECT * FROM Food_Establishment_Location WHERE Establishment_id = %s", (foodEstabLoggedInID,))
         locations = cursor.fetchall()
         for location in locations:
             print(location[1])
+        print("\n")
         print("Choose what to update:")
         print("[1] Add Location")
         print("[2] Delete Location")
@@ -1915,18 +1923,13 @@ def editRestaurantProfile():
     else:
         print("Invalid choice. Please try again.")
     
-    print("Do you want to edit again?")
-        mariaDBConnect.commit()
-    else:
-        print("Invalid choice. Please try again.")
-    
+    print("\n")
     print("Do you want to edit again?")
     print("[1] Yes")
     print("[2] No")
 
     editAgain = int(input("Enter choice: "))
     if editAgain == 1:
-
         editRestaurantProfile()
 
 def deleteRestaurantProfile():
@@ -2076,7 +2079,7 @@ def header():
   print(header_print)
 
 
-
+# Initialization Prompt
 def configTesting():
     print("\n")
     horizontalLine()
@@ -2084,7 +2087,7 @@ def configTesting():
     horizontalLine()
     print("Is this your first time using the system?")
     print("[1] Yes")
-    print("[2] No")
+    print("[2] No") # Select no to avoid re-initializing the database if it’s already set up
     choice = int(input("Enter choice: "))
     print("\n")
 
@@ -2102,9 +2105,9 @@ def configTesting():
         mariaDBConnect.commit()
             
     elif choice == 2:
-        print("Do you want to clear all data?")
-        print("[1] Yes")
-        print("[2] No")
+        print("Do you want to clear all data?") # Clear data prompt
+        print("[1] Yes") # reset the data for a clean start
+        print("[2] No") # will keep existing data
         choice = int(input("Enter choice: "))
         print("\n")
         if choice == 1:
