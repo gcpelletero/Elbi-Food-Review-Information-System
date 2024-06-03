@@ -1651,7 +1651,7 @@ def updateTypeRelatedDetails(food_id):
         print("Invalid choice. Please try again.")
         updateTypeRelatedDetails(food_id)
     
-    print("Do you want to edit again? [1] Yes \n [2] No")
+    print("Do you want to edit again?")
     print("[1] Yes")
     print("[2] No")
     editagain = input("Enter choice: ")
@@ -1696,7 +1696,7 @@ def updateFoodItem():
         print("Invalid choice. Please try again.")
         updateFoodItem()
     
- 
+ #ITO YUNG EDITEDDDD
 def deleteFoodItemAllfoodEstabLoggedInID():
     cursor.execute("DELETE FROM meat where establishment_id = %s", (foodEstabLoggedInID))
     cursor.execute("DELETE FROM vegetable where establishment_id = %s", (foodEstabLoggedInID))
