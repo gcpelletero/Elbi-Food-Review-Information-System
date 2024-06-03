@@ -21,6 +21,7 @@ def horizontalLine():
 
 
 def signUp():
+    print("\n")
     horizontalLine()
     print("SIGN UP to ELBI FOOD REVIEW")
     print("Choose Account Type:")
@@ -53,6 +54,7 @@ def signUpAsUser():
 # | Middle_name | varchar(50)   | NO   |     | NULL    |       |
 # | Last_name   | varchar(50)   | NO   |     | NULL    |       |
 # +-------------+---------------+------+-----+---------+-------+
+    print("\n")
     print("Sign Up as User")
     username = input("Enter Username: ")
     first_name = input("Enter First Name: ")
@@ -81,6 +83,7 @@ def signUpAsFoodEstab():
 # | Type             | enum('Food Truck','Fine Dining','Cafe','Fast Food') | NO   |     | NULL    |                |
 # | Average_rating   | decimal(1,1)                                        | NO   |     | NULL    |                |
 # +------------------+-----------------------------------------------------+------+-----+---------+----------------+
+    print("\n")
     print("Sign Up as Food Establishment");
     restoname = input("Enter Restaurant Username: ")
     pin = input("Enter PIN: ")
@@ -117,6 +120,7 @@ def signUpAsFoodEstab():
         
     description = input("Enter Description: ")
     capacity = int(input("Enter Capacity: "))
+    print("\n")
     print("Choose Type:")
     print("[1] Food Truck")
     print("[2] Fine Dining")
@@ -249,6 +253,7 @@ def viewFoodReviewsFromResto(restoId):
     print("[1] Yes")
     print("[2] No")
     choice = int(input("Enter choice: "))
+    print("\n")
     if choice == 1:
         print("View by:")
         print("[1] View All")
@@ -271,7 +276,8 @@ def viewFoodRevieSearch(restoId):
 
 
 def viewRestoReviewSearch(restoId):
-    print("Do you want to serach using keyword or by rating?");
+    print("\n")
+    print("Do you want to search using keyword or by rating?")
     print("[1] Search by Keyword")
     print("[2] Search by Rating")
     choice = int(input("Enter choice: "))
@@ -279,8 +285,11 @@ def viewRestoReviewSearch(restoId):
         keyword = input("Enter Keyword: ")
         cursor.execute("SELECT * FROM is_resto_reviewed_by WHERE Establishment_id = %s AND Comment LIKE %s", (restoId, '%' + keyword + '%'))
         reviews = cursor.fetchall()
+        print("\n")
         reviewShower(reviews)
+        print("\n")
     elif choice == 2:
+        print("\n")
         print("Tier of Rating:")
         print("[1] 0-2 *")
         print("[2] 2-3 **")
@@ -365,7 +374,9 @@ def viewFoodReviewsForAResto(restoId):
     elif choice == 3:
         cursor.execute("SELECT * FROM is_food_reviewed_by WHERE Establishment_id = %s", (restoId,))
         reviews = cursor.fetchall()
+        print("\n")
         reviewShower(reviews)
+        print("\n")
 
 def justFoodEstablishmentShower():
     cursor.execute("SELECT * FROM Food_Establishment")
@@ -446,6 +457,7 @@ def viewFoodEstabsAll():
     print("[1] Yes")
     print("[2] No")
     choice = int(input("Enter choice: "))
+    print("\n")
     if choice == 1:
         print("Choose which establishment")
         justFoodEstablishmentShower()
@@ -453,6 +465,7 @@ def viewFoodEstabsAll():
         viewReviewsResto(restoid)
 
 def viewFoodEstabsSearch():
+    print("\n")
     print("Search Food Establishments")
     print("Choose search criteria:")
     print("[1] Name")
@@ -467,6 +480,7 @@ def viewFoodEstabsSearch():
         establishmentShower(foodEstabs)
 
     elif choice == 2:
+        print("\n")
         print("Choose Type:")
         print("[1] Food Truck")
         print("[2] Fine Dining")
@@ -489,6 +503,7 @@ def viewFoodEstabsSearch():
         establishmentShower(foodEstabs)
 
     elif choice == 3:
+        print("\n")
         print("Tier of Rating:")
         print("[1] 0-2 *")
         print("[2] 2-3 **")
@@ -533,11 +548,13 @@ def rateResto():
     establishment_id = int(input("Enter Establishment ID You want to Rate: "))
     cursor.execute("SELECT * FROM is_resto_reviewed_by WHERE Establishment_id = %s AND Username = %s", (establishment_id, userLoggedInUserName))
     if cursor.fetchone() is not None:
+        print("\n")
         print("You have already rated this restaurant.")
         print("Do you want to update your rating?")
         print("[1] Yes")
         print("[2] No")
         choice = int(input("Enter choice: "))
+        print("\n")
         if choice == 1:
             editComments()
     else:
@@ -564,11 +581,13 @@ def rateRestoForFood():
     establishment_id = int(input("Enter Establishment ID whos Food You want to Rate: "))
     cursor.execute("SELECT * FROM is_resto_reviewed_by WHERE Establishment_id = %s AND Username = %s", (establishment_id, userLoggedInUserName))
     if cursor.fetchone() is not None:
+        print("\n")
         print("You have already rated this restaurant.")
         print("Do you want to update your rating?")
         print("[1] Yes")
         print("[2] No")
         choice = int(input("Enter choice: "))
+        print("\n")
         if choice == 1:
             editComments()
     else:
@@ -577,6 +596,7 @@ def rateRestoForFood():
         cursor.execute("INSERT INTO is_resto_reviewed_by (Username, Establishment_id, Review_date, Comment, Rating) VALUES (%s, %s, CURDATE(), %s, %s)", (userLoggedInUserName, establishment_id, comment, rating))
         mariaDBConnect.commit()
         restoAverageRatUpdater(establishment_id)
+    print("\n")
     print("Now, rate the food item of the restaurant.")
     return establishment_id
 
@@ -686,12 +706,12 @@ def rateFoodItem():
     print("For this, you are going to rate a food item from the restaurant.")
 
     establishment_id = rateRestoForFood()
-    print("Eto pinili mo", establishment_id)
     cursor.execute("SELECT * from Food where Establishment_id = %s", (establishment_id,))  
     foodItems = cursor.fetchall()
 
     if foodItems == []:
         print("There is no food to comment for this restaurant.")
+        print("\n")
         return
 
     justFoodItemShowerFromEstab(establishment_id)
@@ -700,12 +720,13 @@ def rateFoodItem():
 
     cursor.execute("SELECT * FROM is_food_reviewed_by WHERE Establishment_id = %s AND username = %s AND food_id = %s", (establishment_id, userLoggedInUserName, food_id))
     if cursor.fetchone() is not None:
+        print("\n")
         print("You have already rated this food item from this restaurant.")
         print("Do you want to update your rating?")
         print("[1] Yes")
         print("[2] No")
         choice = int(input("Enter choice: "))
-
+        print("\n")
         if choice == 1:
             editComments()
     else:
@@ -720,6 +741,7 @@ def viewFoodItemsAll():
     foodItems = cursor.fetchall()
 
     foodItemShower(foodItems)
+    print("\n")
     print("Do you want to rate this food and its restaurant?")
     print("[1] Yes")
     print("[2] No")
@@ -729,6 +751,7 @@ def viewFoodItemsAll():
         rateFoodItem()
 
 def viewFoodItemsSearch():
+    print("\n")
     print("Search results by:")
     print("[1] Rating")
     print("[2] Price")
@@ -736,6 +759,7 @@ def viewFoodItemsSearch():
     choice = int(input("Enter choice: "))
 
     if choice == 1:
+        print("\n")
         print("Tier of Rating:")
         print("[1] 0-2 *")
         print("[2] 2-3 **")
@@ -763,12 +787,14 @@ def viewFoodItemsSearch():
         foodItemShower(foodItems)
         
     elif choice == 2:
+        print("\n")
         print("View by order or by range?")
         print("[1] Order")
         print("[2] Range")
 
         choice = int(input("Enter choice: "))
         if choice == 1:
+            print("\n")
             print("Choose Order:")
             print("[1] Ascending")
             print("[2] Descending")
@@ -789,6 +815,7 @@ def viewFoodItemsSearch():
             foodItemShower(foodItems)
             
     elif(choice == 3):
+        print("\n")
         print("Choose Type:")
         print("[1] Meat")
         print("[2] Fruit")
@@ -879,7 +906,7 @@ def editUserProfile():
     print("Middle Name: ", user[7])
     print("Last Name: ", user[8])
 
-
+    print("\n")
     print("Choose what to edit:")
     print("(Cannot Change) Username")
     print("[1] Email")
@@ -893,34 +920,42 @@ def editUserProfile():
     choice = int(input("Enter choice: "))
     if choice == 1:
         newEmail = input("Enter new Email: ")
+        print("\n")
         cursor.execute("UPDATE Users SET Email = %s WHERE Username = %s", (newEmail, userLoggedInUserName))
         mariaDBConnect.commit()
     elif choice == 2:
         newPassword = input("Enter new Password: ")
+        print("\n")
         cursor.execute("UPDATE Users SET Password = %s WHERE Username = %s", (newPassword, userLoggedInUserName))
         mariaDBConnect.commit()
     elif choice == 3:
         newBio = input("Enter new Bio: ")
+        print("\n")
         cursor.execute("UPDATE Users SET Bio = %s WHERE Username = %s", (newBio, userLoggedInUserName))
         mariaDBConnect.commit()
     elif choice == 4:
         newBirthday = input("Enter new Birthday (YYYY-MM-DD): ")
+        print("\n")
         cursor.execute("UPDATE Users SET Birthday = %s WHERE Username = %s", (newBirthday, userLoggedInUserName))
         mariaDBConnect.commit()
     elif choice == 5:
         newAge = int(input("Enter new Age: "))
+        print("\n")
         cursor.execute("UPDATE Users SET Age = %s WHERE Username = %s", (newAge, userLoggedInUserName))
         mariaDBConnect.commit()
     elif choice == 6:
         newFirstName = input("Enter new First Name: ")
+        print("\n")
         cursor.execute("UPDATE Users SET First_name = %s WHERE Username = %s", (newFirstName, userLoggedInUserName))
         mariaDBConnect.commit()
     elif choice == 7:
         newMiddleName = input("Enter new Middle Name: ")
+        print("\n")
         cursor.execute("UPDATE Users SET Middle_name = %s WHERE Username = %s", (newMiddleName, userLoggedInUserName))
         mariaDBConnect.commit()
     elif choice == 8:
         newLastName = input("Enter new Last Name: ")
+        print("\n")
         cursor.execute("UPDATE Users SET Last_name = %s WHERE Username = %s", (newLastName, userLoggedInUserName))
         mariaDBConnect.commit()
     else:
@@ -930,6 +965,7 @@ def editUserProfile():
 def foodReviewShower(foodReviews):
     if foodReviews == []:
         print("No reviews found.")
+        print("\n")
     for foodReview in foodReviews:
         print("----------------------------------------------------------------------")
         print("Food ID: ", foodReview[2])
@@ -960,11 +996,13 @@ def editComments():
     print("[1] Edit Comment for Food Item")
     print("[2] Edit Comment for Restaurant")
     choice = int(input("Enter choice: "))
+    print("\n")
     if choice == 1:
         cursor.execute("SELECT * FROM is_food_reviewed_by WHERE Username = %s", (userLoggedInUserName,))
         foodReviews = cursor.fetchall()
         foodReviewShower(foodReviews)
-    
+
+        print("\n")
         print("Do you want to edit or delete? ")
         print("[1] Edit")
         print("[2] Delete")
@@ -988,6 +1026,7 @@ def editComments():
         cursor.execute("SELECT * FROM is_resto_reviewed_by WHERE Username = %s", (userLoggedInUserName,))
         restReviews = cursor.fetchall()
         restoReviewShower(restReviews)
+        print("\n")       
         print("Do you want to edit or delete? ")
         print("[1] Edit")
         print("[2] Delete")
@@ -1001,6 +1040,7 @@ def editComments():
             newRating = float(input("Enter new Rating: "))
             cursor.execute("UPDATE is_resto_reviewed_by SET Rating = %s WHERE Username = %s AND Establishment_id = %s", (newRating, userLoggedInUserName, establishment_id))
             mariaDBConnect.commit()
+            print("\n")
         if choice == 2:
             establishment_id = int(input("Enter Establishment ID to delete comment: "))
             cursor.execute("DELETE FROM is_resto_reviewed_by WHERE Username = %s AND Establishment_id = %s", (userLoggedInUserName, establishment_id))
@@ -1029,6 +1069,7 @@ def menuUser():
         print("[6] Edit Profile")
         print("[0] Logout")
         choice = int(input("Enter choice: "))
+        print("\n")
         if choice == 1:
             viewFoodEstabs()
         elif choice == 2:
@@ -1042,11 +1083,10 @@ def menuUser():
         elif choice == 6:
             editUserProfile()
         elif choice == 0:
-            logout()
+            userlogout()
         else:
             print("Invalid choice. Please try again.")
             menuUser()
-        print("\n")
     
 
 def loginAsUser():
@@ -1076,6 +1116,7 @@ def loginAsFoodEstab():
     cursor.execute("SELECT * FROM Food_Establishment WHERE restoname = %s AND pin = %s", (restoname, pin))
     isPresent = cursor.fetchall()
     print("marker2")
+    print("\n")
     if isPresent:
         cursor.execute("SELECT Establishment_id FROM Food_Establishment WHERE restoname = %s AND pin = %s", (restoname, pin))
         global foodEstabLoggedInID 
@@ -1097,6 +1138,7 @@ def addMeat(food_id):
 # | Doneness       | enum('Rare','Medium Rare','Medium','Well Done') | YES  |     | NULL    |       |
 # | Part_of_animal | enum('Leg','Breast','Thigh','Wing')             | YES  |     | NULL    |       |
 # +----------------+-------------------------------------------------+------+-----+---------+-------+
+        print("\n")
         print("Choose Type of Meat:")
         print("[1] Beef")
         print("[2] Pork")
@@ -1113,7 +1155,8 @@ def addMeat(food_id):
         elif choice == 4:
             type_of_meat = "Seafood"
         else:
-            print("Invalid choice. Please try again.") 
+            print("Invalid choice. Please try again.")
+        print("\n")    
         print("Choose Doneness:")
         print("[1] Rare")
         print("[2] Medium Rare")
@@ -1131,6 +1174,7 @@ def addMeat(food_id):
         else:
             print("Invalid choice. Please try again.")
         
+        print("\n")
         print("Choose Part of Animal:")
         print("[1] Leg")
         print("[2] Breast")
@@ -1261,6 +1305,7 @@ def addFoodItem():
 # | Average_rating   | decimal(1,1)  | NO   |     | NULL    |                |
 # | Establishment_id | int(3)        | NO   | MUL | NULL    |                |
 # +------------------+---------------+------+-----+---------+----------------+
+    print("\n")
     print("Add Food Item")
     name = input("Enter Name: ")
     description = input("Enter Description: ")
@@ -1278,7 +1323,7 @@ def addFoodItem():
 # | Food_id    | int(3)      | NO   | PRI | NULL    |       |
 # | Ingredient | varchar(50) | NO   | PRI | NULL    |       |
 # +------------+-------------+------+-----+---------+-------+
-
+    print("\n")
     print("Add Ingredients")
     numberOfIngredients = int(input("Enter number of ingredients: "))
     for i in range(numberOfIngredients):
@@ -1305,6 +1350,7 @@ def addFoodItem():
         else:
             print("Invalid choice. Please try again.")
 
+        print("\n")
         print("Do you wish to add another type?")
         print("[1] Yes")
         print("[2] No")
@@ -1336,6 +1382,7 @@ def updateMeat(food_id):
     print("[3] Part of Animal")
     choice = int(input("Enter choice: "))
     if choice == 1:
+        print("\n")
         print("Choose Type of Meat:")
         print("[1] Beef")
         print("[2] Pork")
@@ -1356,6 +1403,7 @@ def updateMeat(food_id):
         cursor.execute("UPDATE Meat SET Type_of_meat = %s WHERE Food_id = %s", (type_of_meat, food_id))
         mariaDBConnect.commit()
     elif choice == 2:
+        print("\n")
         print("Choose Doneness:")
         print("[1] Rare")
         print("[2] Medium Rare")
@@ -1376,6 +1424,7 @@ def updateMeat(food_id):
         cursor.execute("UPDATE Meat SET Doneness = %s WHERE Food_id = %s", (doneness, food_id))
         mariaDBConnect.commit()
     elif choice == 3:
+        print("\n")
         print("Choose Part of Animal:")
         print("[1] Leg")
         print("[2] Breast")
@@ -1541,6 +1590,7 @@ def editMeat(food_id):
     print("[3] Part of Animal")
     choice = int(input("Enter choice: "))
     if choice == 1:
+        print("\n")
         print("Choose Type of Meat:")
         print("[1] Beef")
         print("[2] Pork")
@@ -1561,6 +1611,7 @@ def editMeat(food_id):
         cursor.execute("UPDATE Meat SET Type_of_meat = %s WHERE Food_id = %s", (type_of_meat, food_id))
         mariaDBConnect.commit()
     elif choice == 2:
+        print("\n")
         print("Choose Doneness:")
         print("[1] Rare")
         print("[2] Medium Rare")
@@ -1581,6 +1632,7 @@ def editMeat(food_id):
         cursor.execute("UPDATE Meat SET Doneness = %s WHERE Food_id = %s", (doneness, food_id))
         mariaDBConnect.commit()
     elif choice == 3:
+        print("\n")
         print("Choose Part of Animal:")
         print("[1] Leg")
         print("[2] Breast")
@@ -1780,7 +1832,8 @@ def updateTypeRelatedDetails(food_id):
     print("Do you want to edit again?")
     print("[1] Yes")
     print("[2] No")
-    if editagain == 1:
+    choice = input("Enter choice: ")
+    if choice == 1:
         updateTypeRelatedDetails(food_id)
        
 
@@ -1788,8 +1841,10 @@ def updateTypeRelatedDetails(food_id):
 
 
 def updateFoodItem():
+    print("\n")
     print("Update Food Item")
     viewFoodItemsForEstab(foodEstabLoggedInID)
+    print("\n")
     food_id = int(input("Enter Food ID to update: "))
     print("Choose what to update:")
     print("[1] Name")
@@ -1855,9 +1910,11 @@ def deleteFoodItem():
         print("No food items to delete.")
         return
     
+    print("\n")
     print("Delete Food Item")
     viewFoodItemsForEstab(foodEstabLoggedInID)
 
+    print("\n")
     food_id = int(input("Enter Food ID to delete: "))
     cursor.execute("DELETE FROM Meat WHERE Food_id = %s", (food_id,))
     mariaDBConnect.commit()
@@ -1879,17 +1936,20 @@ def deleteFoodItem():
     print("Food Item deleted successfully!")
     
 def editRestaurantProfile():
+    print("\n")
     print("Edit Restaurant Profile")
+    print("\n")
     print("Current Restaurant Profile:")
     cursor.execute("SELECT * FROM Food_Establishment WHERE Establishment_id = %s", (foodEstabLoggedInID,))
     foodEstabDetails = cursor.fetchall()
     if foodEstabDetails:
-        print("Name:", foodEstabDetails[0][2])
-        print("Description:", foodEstabDetails[0][3])
-        print("Capacity:", foodEstabDetails[0][4])
-        print("Type:", foodEstabDetails[0][5])
+        print("Name:", foodEstabDetails[0][3])
+        print("Establishment ID:", foodEstabDetails[0][2])
+        print("Description:", foodEstabDetails[0][4])
+        print("Capacity:", foodEstabDetails[0][5])
+        print("Type:", foodEstabDetails[0][6])
 
-        print("Branch Locations")
+        print("Branch Locations: ")
         cursor.execute("SELECT * FROM Food_Establishment_Location WHERE Establishment_id = %s", (foodEstabLoggedInID,))
         locations = cursor.fetchall()
         for location in locations:
@@ -1898,14 +1958,15 @@ def editRestaurantProfile():
 
         cursor.execute("SELECT * FROM Food_Establishment_Social_Media_Link WHERE Establishment_id = %s", (foodEstabLoggedInID,))
         social_media_links = cursor.fetchall()
-        print("Social Media Links:")
+        print("Social Media Links: ")
         for social_media_link in social_media_links:
             print(social_media_link[1])
         cursor.execute("SELECT * FROM Food_Establishment_Contact WHERE Establishment_id = %s", (foodEstabLoggedInID,))
         contact_numbers = cursor.fetchall()
-        print("Contact Numbers:")
+        print("Contact Numbers: ")
         for contact_number in contact_numbers:
             print(contact_number[1])
+        print("\n")
 
     print("Choose what to update:")
     print("[1] Name")
@@ -1930,6 +1991,7 @@ def editRestaurantProfile():
         cursor.execute("UPDATE Food_Establishment SET Capacity = %s WHERE Establishment_id = %s", (capacity, foodEstabLoggedInID))
         mariaDBConnect.commit()
     elif choice == 4:
+        print("\n")
         print("Choose Type:")
         print("[1] Food Truck")
         print("[2] Fine Dining")
@@ -1952,13 +2014,15 @@ def editRestaurantProfile():
     else:
         print("Invalid choice. Please try again.")
     
-    editAgain = input("Do you want to edit again?")
+    print("Do you want to edit again?")
     print("[1] Yes")
     print("[2] No")
-    if editAgain == 1:
+    choice = input("Enter choice: ")
+    if choice == 1:
         editRestaurantProfile()
 
 def deleteRestaurantProfile():
+    print("\n")
     print("Delete Restaurant Profile")
     print("Are you sure you want to delete your restaurant profile?")
     print("[1] Yes")
@@ -1983,7 +2047,31 @@ def deleteRestaurantProfile():
     elif choice == 2:
         print("Restaurant Profile not deleted.")
 
-def logout():
+def foodestablogout():
+    global userLoggedInUserName
+    global foodEstabLoggedInID
+    print("\n")
+    print("Logout")
+    print("Are you sure you want to logout?")
+    print("[1] Yes")
+    print("[2] No")
+    choice = int(input("Enter choice: "))
+    
+    if choice == 1:
+        
+        print("Logout successful!")
+        print("\n")
+        userLoggedInUserName = ""
+        foodEstabLoggedInID = 0
+        login()
+    elif choice == 2:
+        print("\n")
+        menuFoodEstab()
+    else:
+        print("Invalid choice. Please try again.")
+        foodestablogout()
+
+def userlogout():
     global userLoggedInUserName
     global foodEstabLoggedInID
     print("Logout")
@@ -1993,15 +2081,18 @@ def logout():
     choice = int(input("Enter choice: "))
     if choice == 1:
         print("Logout successful!")
+        print("\n")
         userLoggedInUserName = ""
         foodEstabLoggedInID = 0
         login()
+    elif choice == 2:
+        menuUser()
     else:
         print("Invalid choice. Please try again.")
-        logout()
+        userlogout()
 
 def menuHeader():
-
+    
     smallHorizontalLine()
     print("╔╦╗┌─┐┌┐┌┬ ┬")
     print("║║║├┤ ││││ │")
@@ -2036,7 +2127,7 @@ def menuFoodEstab():
         elif choice == 7:
             deleteRestaurantProfile()
         elif choice == 0:
-            logout()
+            foodestablogout()
         else:
             print("Invalid choice. Please try again.")
             menuFoodEstab()
@@ -2079,6 +2170,7 @@ def header():
 
 
 def configTesting():
+    print("\n")
     horizontalLine()
     print("CONFIGURE YOURSELF AS A TESTER")
     horizontalLine()
@@ -2086,6 +2178,8 @@ def configTesting():
     print("[1] Yes")
     print("[2] No")
     choice = int(input("Enter choice: "))
+    print("\n")
+
     if choice == 1:
         with open('database_initializer.sql', 'r') as file:
             sql_script = file.read()
@@ -2104,6 +2198,7 @@ def configTesting():
         print("[1] Yes")
         print("[2] No")
         choice = int(input("Enter choice: "))
+        print("\n")
         if choice == 1:
             with open('database_resetter.sql', 'r') as file:
                 sql_script = file.read()
@@ -2140,7 +2235,6 @@ def main():
         if choice == 2:
             print("\n")
             print("Restarting the Application...")
-            print("\n")
             main()
         
 
