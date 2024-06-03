@@ -1767,6 +1767,14 @@ def editRestaurantProfile():
         locations = cursor.fetchall()
         for location in locations:
             print(location[1], ",", location[2])
+    
+        print("Do you want to edit?")
+        print("[1] Yes")
+        print("[2] No")
+
+        choice = int(input("Enter choice: "))
+        if choice == 2:
+            return
         
 
         cursor.execute("SELECT * FROM Food_Establishment_Social_Media_Link WHERE Establishment_id = %s", (foodEstabLoggedInID,))
