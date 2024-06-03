@@ -983,6 +983,7 @@ def editComments():
             newRating = float(input("Enter new Rating: "))
             cursor.execute("UPDATE is_food_reviewed_by SET Rating = %s WHERE Username = %s AND Food_id = %s AND establishment_id  = %s", (newRating, userLoggedInUserName, food_id, estab_id))
             mariaDBConnect.commit()
+            foodAverageRatUpdater(food_id)
 
             print("Edited comment.")
 
@@ -991,6 +992,7 @@ def editComments():
             estab_id = int(input("Enter Establishment ID to delete comment: "))
             cursor.execute("DELETE FROM is_food_reviewed_by WHERE Username = %s AND Food_id = %s AND establishment_id = %s", (userLoggedInUserName, food_id, estab_id))
             mariaDBConnect.commit()
+            foodAverageRatUpdater(food_id)
 
             print("Deleted comment.")
 
@@ -1012,11 +1014,13 @@ def editComments():
             newRating = float(input("Enter new Rating: "))
             cursor.execute("UPDATE is_resto_reviewed_by SET Rating = %s WHERE Username = %s AND Establishment_id = %s", (newRating, userLoggedInUserName, establishment_id))
             mariaDBConnect.commit()
+            restoAverageRatUpdater(establishment_id)
             print("Edited comment.")
         if choice == 2:
             establishment_id = int(input("Enter Establishment ID to delete comment: "))
             cursor.execute("DELETE FROM is_resto_reviewed_by WHERE Username = %s AND Establishment_id = %s", (userLoggedInUserName, establishment_id))
             mariaDBConnect.commit()
+            restoAverageRatUpdater(establishment_id)
             print("Deleted comment.")
     else:
         print("Invalid choice. Please try again.")
@@ -1026,7 +1030,7 @@ def bruteLogout():
     global userLoggedInUserName
     global foodEstabLoggedInID
     userLoggedInUserName = ""
-    establishment_id = 0
+    foodEstabLoggedInID = 0
 
 def menuUser():
     print("\n")
