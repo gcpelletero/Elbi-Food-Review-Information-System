@@ -1914,11 +1914,7 @@ def editRestaurantProfile():
 
     else:
         print("Invalid choice. Please try again.")
-    
-    print("Do you want to edit again?")
-        mariaDBConnect.commit()
-    else:
-        print("Invalid choice. Please try again.")
+
     
     print("Do you want to edit again?")
     print("[1] Yes")
