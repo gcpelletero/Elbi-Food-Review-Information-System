@@ -18,15 +18,15 @@ DELETE FROM food_establishment;
 
 DELETE FROM USERS;
 
-INSERT INTO food_establishment VALUES ('cels_fastfood', 'cels', 3, 'Cels Fastfood', 'We are located at 10634 Demarses Subdivision Batong Malake Los Banos Laguna', 50, 'Fast Food', 0);
+INSERT INTO food_establishment VALUES ('cels_fastfood', 'cels', 3, 'Cels Fastfood', 'We are located at 123123 Demarses Subdivision Batong Malake Los Banos Laguna', 50, 'Fast Food', 4.75);
 INSERT INTO food_establishment_contact VALUES (3, '0915 289 2880');
 INSERT INTO food_establishment_location VALUES (3, 'Los Banos', 'Laguna');
 INSERT INTO food_establishment_social_media_link VALUES (3, 'https://www.facebook.com/cels.fastfood.7/');
-INSERT INTO food_establishment VALUES ('cadapans', 'cadapan', 2, 'Cadapan', 'We are located at 10634 Demarses Subdivision Batong Malake Los Banos Laguna', 50, 'Fast Food', 0);
+INSERT INTO food_establishment VALUES ('cadapans', 'cadapan', 2, 'Cadapan', 'We are located at 1123 Umali Subdivision Batong Malake Los Banos Laguna', 50, 'Fast Food', 4.8);
 INSERT INTO food_establishment_contact VALUES (2, '0915 289 2880');
 INSERT INTO food_establishment_location VALUES (2, 'Los Banos', 'Laguna');
 INSERT INTO food_establishment_social_media_link VALUES (2, 'https://www.facebook.com/cadapans.7/');
-INSERT INTO food_establishment VALUES ('elbi_food_review', 'elbi_food_review', 1, 'Elbi Food Review', 'We are located at 10634 Demarses Subdivision Batong Malake Los Banos Laguna', 50, 'Fast Food', 0);
+INSERT INTO food_establishment VALUES ('elbi_food_review', 'elbi_food_review', 1, 'Elbi Food Review', 'We are located at Sample Sample  Subdivision Batong Malake Los Banos Laguna', 50, 'Fast Food', 0);
 INSERT INTO food_establishment_contact VALUES (1, '0915 289 2880');
 INSERT INTO food_establishment_location VALUES (1, 'Los Banos', 'Laguna');
 INSERT INTO food_establishment_location VALUES (1, 'Alaminos', 'Laguna');
@@ -55,15 +55,16 @@ INSERT INTO food_ingredient VALUES (3, 'Thinly Sliced Pork');
 INSERT INTO meat VALUES (3, 'Poultry', NULL, 'Breast');
 INSERT INTO vegetable VALUES (3, 'Root');
 
-INSERT INTO USERS VALUES ('john_doe', 'john@example.com', 'password123', 'Hello, I''m John Doe!', '1990-01-01', 31, 'John', 'Doe', 'Doe');
-INSERT INTO USERS VALUES ('jane_doe', 'jane@example.com', 'password123', 'Hello, I''m Jane Doe!', '1990-01-01', 31, 'Jane', 'Doe', 'Doe');
+INSERT INTO USERS VALUES ('irish_maki', 'ipmakiramdam@up.edu.ph', 'useruser', 'Hello, I''m Irish Maki!', '2002-03-12', 22, 'Irish Maki', 'Makiramdam', 'Makiramdam');
+INSERT INTO USERS VALUES ('gab_pelle', 'gpelletero@up.edu.ph', 'useruser', 'Hello, I''m Gab Pelle!', '2002-03-12', 22, 'Gab', 'Pelletero', 'Pelletero');
+INSERT INTO USERS VALUES ('ramnick_francis', 'rpramos5@up.edu.ph', 'useruser', 'Hello, I''m Ramnick Francis Ramos!', '2002-03-12', 22, 'Ramnick Francis', 'Perez', 'Ramos');
 
-INSERT INTO is_food_reviewed_by VALUES ('john_doe', 1, 1, '2021-01-01', 'This is a delicious dish!', 4.8);
-INSERT INTO is_food_reviewed_by VALUES ('jane_doe', 1, 1, '2021-01-01', 'This is a tasty dish!', 4.7);
-INSERT INTO is_food_reviewed_by VALUES ('john_doe', 1, 3, '2021-01-01', 'This is a flavorful dish!', 4.9);
-INSERT INTO is_food_reviewed_by VALUES ('jane_doe', 1, 3, '2021-01-01', 'This is a mouthwatering dish!', 4.6);
+INSERT INTO is_food_reviewed_by VALUES ('irish_maki', 1, 1, '2021-01-01', 'This is a delicious dish!', 4.8);
+INSERT INTO is_food_reviewed_by VALUES ('gab_pelle', 1, 1, '2021-01-01', 'This is a tasty dish!', 4.7);
+INSERT INTO is_food_reviewed_by VALUES ('irish_maki', 1, 3, '2021-01-01', 'This is a flavorful dish!', 4.9);
+INSERT INTO is_food_reviewed_by VALUES ('gab_pelle', 1, 3, '2021-01-01', 'This is a mouthwatering dish!', 4.6);
 
-INSERT INTO is_resto_reviewed_by VALUES ('john_doe', 1, '2021-01-01', 'This is a fantastic restaurant!', 4.8);
-INSERT INTO is_resto_reviewed_by VALUES ('jane_doe', 1, '2021-01-01', 'This is an amazing restaurant!', 4.7);
-INSERT INTO is_resto_reviewed_by VALUES ('john_doe', 2, '2021-01-01', 'This is a wonderful restaurant!', 4.9);
-INSERT INTO is_resto_reviewed_by VALUES ('jane_doe', 2, '2021-01-01', 'This is a superb restaurant!', 4.6);
+INSERT INTO is_resto_reviewed_by VALUES ('irish_maki', 1, '2021-01-01', 'This is a fantastic restaurant!', 4.8);
+INSERT INTO is_resto_reviewed_by VALUES ('gab_pelle', 1, '2021-01-01', 'This is an amazing restaurant!', 4.7);
+INSERT INTO is_resto_reviewed_by VALUES ('irish_maki', 2, '2021-01-01', 'This is a wonderful restaurant!', 4.9);
+INSERT INTO is_resto_reviewed_by VALUES ('gab_pelle', 2, '2021-01-01', 'This is a superb restaurant!', 4.6);

@@ -1005,6 +1005,10 @@ def editComments():
 
         cursor.execute("SELECT * FROM is_food_reviewed_by WHERE Username = %s", (userLoggedInUserName,))
         foodReviews = cursor.fetchall()
+
+        if foodReviews == []:
+            print("No food reviews found.")
+            return
         foodReviewShower(foodReviews)
 
         print("\n")
@@ -1039,6 +1043,9 @@ def editComments():
     elif choice == 2:
         cursor.execute("SELECT * FROM is_resto_reviewed_by WHERE Username = %s", (userLoggedInUserName,))
         restReviews = cursor.fetchall()
+        if restReviews == []:
+            print("No restaurant reviews found.")
+            return
         restoReviewShower(restReviews)
         print("\n")       
         print("Do you want to edit or delete? ")
@@ -2026,7 +2033,7 @@ def menuFoodEstab():
         print("[3] Delete Food Item")
         print("[4] View Food Items")
         print("[5] View Reviews")
-        print("[6] Edit Restaurant Profile")
+        print("[6] View/Edit Restaurant Profile")
         print("[7] Delete Restaurant Profile")
         print("[0] Log Out")
         choice = int(input("Enter choice: "))
