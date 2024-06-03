@@ -55,14 +55,9 @@ INSERT INTO food_ingredient VALUES (3, 'Thinly Sliced Pork');
 INSERT INTO meat VALUES (3, 'Poultry', NULL, 'Breast');
 INSERT INTO vegetable VALUES (3, 'Root');
 
-<<<<<<< HEAD
 INSERT INTO USERS VALUES ('irish_maki', 'ipmakiramdam@up.edu.ph', 'useruser', 'Hello, I''m Irish Maki!', '2002-03-12', 22, 'Irish Maki', 'Makiramdam', 'Makiramdam');
 INSERT INTO USERS VALUES ('gab_pelle', 'gpelletero@up.edu.ph', 'useruser', 'Hello, I''m Gab Pelle!', '2002-03-12', 22, 'Gab', 'Pelletero', 'Pelletero');
 INSERT INTO USERS VALUES ('ramnick_francis', 'rpramos5@up.edu.ph', 'useruser', 'Hello, I''m Ramnick Francis Ramos!', '2002-03-12', 22, 'Ramnick Francis', 'Perez', 'Ramos');
-=======
-INSERT INTO USERS VALUES ('john_doe', 'john@example.com', 'password123', 'Hello, I''m John Doe!', '1990-01-01', 31, 'John', 'Doe', 'Doe');
-INSERT INTO USERS VALUES ('jane_doe', 'jane@example.com', 'password123', 'Hello, I''m Jane Doe!', '1990-01-01', 31, 'Jane', 'Doe', 'Doe');
->>>>>>> origin/documentations
 
 INSERT INTO is_food_reviewed_by VALUES ('irish_maki', 1, 1, '2021-01-01', 'This is a delicious dish!', 4.8);
 INSERT INTO is_food_reviewed_by VALUES ('gab_pelle', 1, 1, '2021-01-01', 'This is a tasty dish!', 4.7);
