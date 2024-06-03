@@ -184,8 +184,7 @@ def signUpAsFoodEstab():
             choice = int(input("Enter choice: "))
             if choice == 2:
                 break
-    
-    
+
 
 def reviewShower(reviews):
 
@@ -199,13 +198,11 @@ def reviewShower(reviews):
         print("Rating: ", review[4])
       
 def viewReviewsResto(restoId):
-    
     print("\n")
     print("Select the date range of the reviews you want to see.")
     print("[1] All")
     print("[2] Custom")
     choice = int(input("Enter choice: "))
-
     if choice == 1:
         print("\n")
         smallHorizontalLine()
@@ -219,9 +216,6 @@ def viewReviewsResto(restoId):
         reviews = cursor.fetchall()
         reviewShower(reviews)
         
-        
-    
-      
     if choice == 2:
         startDate = input("Enter Start Date (YYYY-MM-DD): ")
         endDate = input("Enter End Date (YYYY-MM-DD): ")
@@ -235,7 +229,6 @@ def viewReviewsResto(restoId):
         print("REVIEWS FOR ", foodEstab[0][3])
         smallHorizontalLine()
         print("\n")
-        
         reviewShower(reviews)
 
     cursor.execute("SELECT * FROM is_food_reviewed_by WHERE Establishment_id = %s", (restoId,))
@@ -353,6 +346,7 @@ def viewFoodReviewsForAResto(restoId):
             print("Arrange by:")
             print("[1] Ascending")
             print("[2] Descending")
+
             choice = int(input("Enter choice: "))
             if choice == 1:
                 cursor.execute("SELECT * FROM is_food_reviewed_by WHERE Establishment_id = %s AND Review_date BETWEEN %s AND %s ORDER BY Review_date ASC", (restoId, startDate, endDate))
@@ -455,7 +449,7 @@ def viewFoodEstabsAll():
 def viewFoodEstabsSearch():
     print("Search Food Establishments")
     print("Choose search criteria:")
-    print("[1] Name")
+    print("[1] Name Keyword")
     print("[2] Type")
     print("[3] Average Rating")
     choice = int(input("Enter choice: "))
@@ -686,7 +680,6 @@ def rateFoodItem():
     print("For this, you are going to rate a food item from the restaurant.")
 
     establishment_id = rateRestoForFood()
-    print("Eto pinili mo", establishment_id)
     cursor.execute("SELECT * from Food where Establishment_id = %s", (establishment_id,))  
     foodItems = cursor.fetchall()
 
@@ -733,6 +726,7 @@ def viewFoodItemsSearch():
     print("[1] Rating")
     print("[2] Price")
     print("[3] Type")
+    print("[4] Food Name")
     choice = int(input("Enter choice: "))
 
     if choice == 1:
@@ -834,13 +828,18 @@ def viewFoodItemsSearch():
         else:
             print("Invalid choice. Please try again.")
             viewFoodItemsSearch()
+        foodItemShower(foodItems)
 
+    elif choice == 4:
+        name = input("Enter Name: ")
+        cursor.execute("SELECT * FROM Food WHERE Name LIKE %s", ('%' + name + '%',))
+        foodItems = cursor.fetchall()
         foodItemShower(foodItems)
 
 def viewFoodItem():
     print("Do you want to see all or search?")
     print("[1] All")
-    print("[2] Search")
+    print("[2] Search by keyword or Criteria")
     choice = int(input("Enter choice: "))
     if choice == 1:
         viewFoodItemsAll()
@@ -955,35 +954,42 @@ def restoReviewShower(restoReviews):
         print("Rating: ", restoReview[4])
 
 def editComments():
+
     print("Edit Comments")
     print("Choose what to edit:")
     print("[1] Edit Comment for Food Item")
     print("[2] Edit Comment for Restaurant")
     choice = int(input("Enter choice: "))
+
+    
     if choice == 1:
+
         cursor.execute("SELECT * FROM is_food_reviewed_by WHERE Username = %s", (userLoggedInUserName,))
         foodReviews = cursor.fetchall()
         foodReviewShower(foodReviews)
-    
+
         print("Do you want to edit or delete? ")
         print("[1] Edit")
         print("[2] Delete")
         choice = int(input("Enter choice: "))
+
         if choice == 1:
             food_id = int(input("Enter Food ID to edit comment: "))
             estab_id = int(input("Enter Establishment ID to edit comment: "))
             newComment = input("Enter new Comment: ")
-            cursor.execute("UPDATE is_food_reviewed_by SET Comment = %s WHERE Username = %s AND Food_id = %s AND establishment_id", (newComment, userLoggedInUserName, food_id, estab_id))
+            cursor.execute("UPDATE is_food_reviewed_by SET Comment = %s WHERE Username = %s AND Food_id = %s AND establishment_id = %s", (newComment, userLoggedInUserName, food_id, estab_id))
             mariaDBConnect.commit()
 
             newRating = float(input("Enter new Rating: "))
-            cursor.execute("UPDATE is_food_reviewed_by SET Rating = %s WHERE Username = %s AND Food_id = %s AND establishment_id", (newRating, userLoggedInUserName, food_id, estab_id))
+            cursor.execute("UPDATE is_food_reviewed_by SET Rating = %s WHERE Username = %s AND Food_id = %s AND establishment_id  = %s", (newRating, userLoggedInUserName, food_id, estab_id))
             mariaDBConnect.commit()
+
         if choice == 2:
             food_id = int(input("Enter Food ID to delete comment: "))
             estab_id = int(input("Enter Establishment ID to delete comment: "))
-            cursor.execute("DELETE FROM is_food_reviewed_by WHERE Username = %s AND Food_id = %s AND establishment_id", (userLoggedInUserName, food_id, estab_id))
+            cursor.execute("DELETE FROM is_food_reviewed_by WHERE Username = %s AND Food_id = %s AND establishment_id = %s", (userLoggedInUserName, food_id, estab_id))
             mariaDBConnect.commit()
+
     elif choice == 2:
         cursor.execute("SELECT * FROM is_resto_reviewed_by WHERE Username = %s", (userLoggedInUserName,))
         restReviews = cursor.fetchall()
@@ -995,6 +1001,7 @@ def editComments():
         if choice == 1:
             establishment_id = int(input("Enter Establishment ID to edit comment: "))
             newComment = input("Enter new Comment: ")
+
             cursor.execute("UPDATE is_resto_reviewed_by SET Comment = %s WHERE Username = %s AND Establishment_id = %s", (newComment, userLoggedInUserName, establishment_id))
             mariaDBConnect.commit()
 
@@ -1322,209 +1329,6 @@ def viewFoodItemsForEstab(food_etabID):
     foodItems = cursor.fetchall()
     foodItemShower(foodItems)
 
-def updateMeat(food_id):
-    print("Current Meat Details:")
-    cursor.execute("SELECT * FROM Meat WHERE Food_id = %s", (food_id,))
-    meatDetails = cursor.fetchall()
-    if meatDetails:
-        print("Type of Meat:", meatDetails[0][1])
-        print("Doneness:", meatDetails[0][2])
-        print("Part of Animal:", meatDetails[0][3])
-    print("Choose what to update:")
-    print("[1] Type of Meat")
-    print("[2] Doneness")
-    print("[3] Part of Animal")
-    choice = int(input("Enter choice: "))
-    if choice == 1:
-        print("Choose Type of Meat:")
-        print("[1] Beef")
-        print("[2] Pork")
-        print("[3] Poultry")
-        print("[4] Seafood")
-        choice = int(input("Enter choice: "))
-        if choice == 1:
-            type_of_meat = "Beef"
-        elif choice == 2:
-            type_of_meat = "Pork"
-        elif choice == 3:
-            type_of_meat = "Poultry"
-        elif choice == 4:
-            type_of_meat = "Seafood"
-        else:
-            print("Invalid choice. Please try again.")
-            updateMeat(food_id)
-        cursor.execute("UPDATE Meat SET Type_of_meat = %s WHERE Food_id = %s", (type_of_meat, food_id))
-        mariaDBConnect.commit()
-    elif choice == 2:
-        print("Choose Doneness:")
-        print("[1] Rare")
-        print("[2] Medium Rare")
-        print("[3] Medium")
-        print("[4] Well Done")
-        choice = int(input("Enter choice: "))
-        if choice == 1:
-            doneness = "Rare"
-        elif choice == 2:
-            doneness = "Medium Rare"
-        elif choice == 3:
-            doneness = "Medium"
-        elif choice == 4:
-            doneness = "Well Done"
-        else:
-            print("Invalid choice. Please try again.")
-            updateMeat(food_id)
-        cursor.execute("UPDATE Meat SET Doneness = %s WHERE Food_id = %s", (doneness, food_id))
-        mariaDBConnect.commit()
-    elif choice == 3:
-        print("Choose Part of Animal:")
-        print("[1] Leg")
-        print("[2] Breast")
-        print("[3] Thigh")
-        print("[4] Wing")
-        choice = int(input("Enter choice: "))
-        if choice == 1:
-            part_of_animal = "Leg"
-        elif choice == 2:
-            part_of_animal = "Breast"
-        elif choice == 3:
-            part_of_animal = "Thigh"
-        elif choice == 4:
-            part_of_animal = "Wing"
-        else:
-            print("Invalid choice. Please try again.")
-            updateMeat(food_id)
-        cursor.execute("UPDATE Meat SET Part_of_animal = %s WHERE Food_id = %s", (part_of_animal, food_id))
-        mariaDBConnect.commit()
-
-def updateFruit(food_id):
-    print("Current Fruit Details:")
-    cursor.execute("SELECT * FROM Fruit WHERE Food_id = %s", (food_id,))
-    fruitDetails = cursor.fetchall()
-    if fruitDetails:
-        print("Ripeness:", fruitDetails[0][1])
-        print("Fruit Category:", fruitDetails[0][2])
-        print("Size:", fruitDetails[0][3])
-    print("Choose what to update:")
-    print("[1] Ripeness")
-    print("[2] Fruit Category")
-    print("[3] Size")
-    choice = int(input("Enter choice: "))
-    if choice == 1:
-        print("Choose Ripeness:")
-        print("[1] Raw")
-        print("[2] Ripe")
-        print("[3] Overripe")
-        choice = int(input("Enter choice: "))
-        if choice == 1:
-            ripeness = "Raw"
-        elif choice == 2:
-            ripeness = "Ripe"
-        elif choice == 3:
-            ripeness = "Overripe"
-        else:
-            print("Invalid choice. Please try again.")
-            updateFruit(food_id)
-        cursor.execute("UPDATE Fruit SET Ripeness = %s WHERE Food_id = %s", (ripeness, food_id))
-        mariaDBConnect.commit()
-    elif choice == 2:
-        print("Choose Fruit Category:")
-        print("[1] Citrus")
-        print("[2] Tropical")
-        print("[3] Berry")
-        choice = int(input("Enter choice: "))
-        if choice == 1:
-            fruit_category = "Citrus"
-        elif choice == 2:
-            fruit_category = "Tropical"
-        elif choice == 3:
-            fruit_category = "Berry"
-        else:
-            print("Invalid choice. Please try again.")
-            updateFruit(food_id)
-        cursor.execute("UPDATE Fruit SET Fruit_category = %s WHERE Food_id = %s", (fruit_category, food_id))
-        mariaDBConnect.commit()
-    elif choice == 3:
-        print("Choose Size:")
-        print("[1] Small")
-        print("[2] Medium")
-        print("[3] Large")
-        choice = int(input("Enter choice: "))
-        if choice == 1:
-            size = "Small"
-        elif choice == 2:
-            size = "Medium"
-        elif choice == 3:
-            size = "Large"
-        else:
-            print("Invalid choice. Please try again.")
-            updateFruit(food_id)
-        cursor.execute("UPDATE Fruit SET Size = %s WHERE Food_id = %s", (size, food_id))
-        mariaDBConnect.commit()
-    
-def updateVegetable(food_id):
-    print("Current Vegetable Details:")
-    cursor.execute("SELECT * FROM Vegetable WHERE Food_id = %s", (food_id,))
-    vegetableDetails = cursor.fetchall()
-    if vegetableDetails:
-        print("Vegetable Family:", vegetableDetails[0][1])
-    print("Choose what to update:")
-    print("[1] Vegetable Family")
-    choice = int(input("Enter choice: "))
-    if choice == 1:
-        print("Choose Vegetable Family:")
-        print("[1] Leafy")
-        print("[2] Root")
-        print("[3] Bulb")
-        print("[4] Stem")
-        choice = int(input("Enter choice: "))
-        if choice == 1:
-            vegetable_family = "Leafy"
-        elif choice == 2:
-            vegetable_family = "Root"
-        elif choice == 3:
-            vegetable_family = "Bulb"
-        elif choice == 4:
-            vegetable_family = "Stem"
-        else:
-            print("Invalid choice. Please try again.")
-            updateVegetable(food_id)
-        cursor.execute("UPDATE Vegetable SET Vegetable_family = %s WHERE Food_id = %s", (vegetable_family, food_id))
-        mariaDBConnect.commit()
-
-def updateDrink(food_id):
-    print("Current Drink Details:")
-    cursor.execute("SELECT * FROM Drink WHERE Food_id = %s", (food_id,))
-    drinkDetails = cursor.fetchall()
-    if drinkDetails:
-        print("Sugar Level:", drinkDetails[0][1])
-        print("Alcohol Level:", drinkDetails[0][2])
-        print("Caffeine Level:", drinkDetails[0][3])
-        print("Volume:", drinkDetails[0][4])
-    print("Choose what to update:")
-    print("[1] Sugar Level")
-    print("[2] Alcohol Level")
-    print("[3] Caffeine Level")
-    print("[4] Volume")
-    choice = int(input("Enter choice: "))
-    if choice == 1:
-        sugar_level = float(input("Enter Sugar Level: "))
-        cursor.execute("UPDATE Drink SET Sugar_level = %s WHERE Food_id = %s", (sugar_level, food_id))
-        mariaDBConnect.commit()
-    elif choice == 2:
-        alcohol_level = float(input("Enter Alcohol Level: "))
-        cursor.execute("UPDATE Drink SET Alcohol_level = %s WHERE Food_id = %s", (alcohol_level, food_id))
-        mariaDBConnect.commit()
-    elif choice == 3:
-        caffeine_level = float(input("Enter Caffeine Level: "))
-        cursor.execute("UPDATE Drink SET Caffeine_level = %s WHERE Food_id = %s", (caffeine_level, food_id))
-        mariaDBConnect.commit()
-    elif choice == 4:
-        volume = float(input("Enter Volume: "))
-        cursor.execute("UPDATE Drink SET Volume = %s WHERE Food_id = %s", (volume, food_id))
-        mariaDBConnect.commit()
-    else:
-        print("Invalid choice. Please try again.")
-        updateDrink(food_id)
     
 def editMeat(food_id):
     print("Edit Meat")
@@ -1780,6 +1584,7 @@ def updateTypeRelatedDetails(food_id):
     print("Do you want to edit again?")
     print("[1] Yes")
     print("[2] No")
+    editagain = int(input("Enter choice: "))
     if editagain == 1:
         updateTypeRelatedDetails(food_id)
        
@@ -1844,7 +1649,6 @@ def deleteFoodItemAllfoodEstabLoggedInID():
             cursor.execute("DELETE FROM Food WHERE Food_id = %s", (food_id,))
           
             mariaDBConnect.commit()
-    
 
 
 def deleteFoodItem():
@@ -1949,12 +1753,101 @@ def editRestaurantProfile():
             editRestaurantProfile()
         cursor.execute("UPDATE Food_Establishment SET Type = %s WHERE Establishment_id = %s", (type, foodEstabLoggedInID))
         mariaDBConnect.commit()
+    elif choice == 5:
+        print("Social Media Links")
+        cursor.execute("SELECT * FROM Food_Establishment_Social_Media_Link WHERE Establishment_id = %s", (foodEstabLoggedInID,))
+        social_media_links = cursor.fetchall()
+        for social_media_link in social_media_links:
+            print(social_media_link[1])
+        print("Choose what to update:")
+        print("[1] Add Social Media Link")
+        print("[2] Delete Social Media Link")
+        print("[3] Edit Social Media Link")
+        choice = int(input("Enter choice: "))
+        if choice == 1:
+            social_media_link = input("Enter Social Media Link: ")
+            cursor.execute("INSERT INTO Food_Establishment_Social_Media_Link (Establishment_id, Social_media_link) VALUES (%s, %s)", (foodEstabLoggedInID, social_media_link))
+            mariaDBConnect.commit()
+        elif choice == 2:
+            social_media_link = input("Enter Social Media Link to delete: ")
+            cursor.execute("DELETE FROM Food_Establishment_Social_Media_Link WHERE Establishment_id = %s AND Social_media_link = %s", (foodEstabLoggedInID, social_media_link))
+            mariaDBConnect.commit()
+        elif choice == 3:
+            social_media_link = input("Enter Social Media Link to edit: ")
+            new_social_media_link = input("Enter New Social Media Link: ")
+            cursor.execute("UPDATE Food_Establishment_Social_Media_Link SET Social_media_link = %s WHERE Establishment_id = %s AND Social_media_link = %s", (new_social_media_link, foodEstabLoggedInID, social_media_link))
+            mariaDBConnect.commit()
+        else:
+            print("Invalid choice. Please try again.")
+            editRestaurantProfile()
+        
+    elif choice == 6:
+        print("Contact Numbers")
+        cursor.execute("SELECT * FROM Food_Establishment_Contact WHERE Establishment_id = %s", (foodEstabLoggedInID,))
+        contact_numbers = cursor.fetchall()
+        for contact_number in contact_numbers:
+            print(contact_number[1])
+        print("Choose what to update:")
+        print("[1] Add Contact Number")
+        print("[2] Delete Contact Number")
+        print("[3] Edit Contact Number")
+        choice = int(input("Enter choice: "))
+        if choice == 1:
+            contact_number = input("Enter Contact Number: ")
+            cursor.execute("INSERT INTO Food_Establishment_Contact (Establishment_id, Contact_number) VALUES (%s, %s)", (foodEstabLoggedInID, contact_number))
+            mariaDBConnect.commit()
+        elif choice == 2:
+            contact_number = input("Enter Contact Number to delete: ")
+            cursor.execute("DELETE FROM Food_Establishment_Contact WHERE Establishment_id = %s AND Contact_number = %s", (foodEstabLoggedInID, contact_number))
+            mariaDBConnect.commit()
+        elif choice == 3:
+            contact_number = input("Enter Contact Number to edit: ")
+            new_contact_number = input("Enter New Contact Number: ")
+            cursor.execute("UPDATE Food_Establishment_Contact SET Contact_number = %s WHERE Establishment_id = %s AND Contact_number = %s", (new_contact_number, foodEstabLoggedInID, contact_number))
+            mariaDBConnect.commit()
+
+        else:
+            print("Invalid choice. Please try again.")
+            editRestaurantProfile()
+    elif choice == 7:
+        print("Branch Locations")
+        cursor.execute("SELECT * FROM Food_Establishment_Location WHERE Establishment_id = %s", (foodEstabLoggedInID,))
+        locations = cursor.fetchall()
+        for location in locations:
+            print(location[1])
+        print("Choose what to update:")
+        print("[1] Add Location")
+        print("[2] Delete Location")
+        print("[3] Edit Location")
+        choice = int(input("Enter choice: "))
+
+# MariaDB [elbi_food_review]> desc food_establishment_location;
+# +------------------+-------------+------+-----+---------+-------+
+# | Field            | Type        | Null | Key | Default | Extra |
+# +------------------+-------------+------+-----+---------+-------+
+# | Establishment_id | int(3)      | NO   | PRI | NULL    |       |
+# | City             | varchar(50) | NO   | PRI | NULL    |       |
+# | Province         | varchar(50) | NO   | PRI | NULL    |       |
+# +------------------+-------------+------+-----+---------+-------+
+        if choice == 1:
+            city = input("Enter City: ")
+            province = input("Enter Province: ")
+            cursor.execute("INSERT INTO Food_Establishment_Location (Establishment_id, City, Province) VALUES (%s, %s, %s)", (foodEstabLoggedInID, city, province))
+            mariaDBConnect.commit()
+        elif choice == 2:
+            location = input("Enter City and Province to delete (City, Province): ")
+            city = location.split(",")[0]
+            province = location.split(",")[1]
+            cursor.execute("DELETE FROM Food_Establishment_Location WHERE Establishment_id = %s AND City = %s AND Province = %s", (foodEstabLoggedInID, city, province))
+            mariaDBConnect.commit()
+
     else:
         print("Invalid choice. Please try again.")
     
-    editAgain = input("Do you want to edit again?")
+    print("Do you want to edit again?")
     print("[1] Yes")
     print("[2] No")
+    editAgain = int(input("Enter choice: "))
     if editAgain == 1:
         editRestaurantProfile()
 
