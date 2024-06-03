@@ -139,21 +139,18 @@ def signUpAsFoodEstab():
     mariaDBConnect.commit()
 
 
-    
-    choice = int(input("Enter choice: "))
-    if choice == 1:
-        while True:
-            print("Location ")
-            city = input("Enter City: ")
-            province = input("Enter Province: ")
-            cursor.execute("INSERT INTO Food_Establishment_Location (Establishment_id, City, Province) VALUES (LAST_INSERT_ID(), %s, %s)", (city, province))
-            mariaDBConnect.commit()
-            print("Do you want to add another location?")
-            print("[1] Yes")
-            print("[2] No")
-            choice = int(input("Enter choice: "))
-            if choice == 2:
-                break
+    while True:
+        print("Location ")
+        city = input("Enter City: ")
+        province = input("Enter Province: ")
+        cursor.execute("INSERT INTO Food_Establishment_Location (Establishment_id, City, Province) VALUES (LAST_INSERT_ID(), %s, %s)", (city, province))
+        mariaDBConnect.commit()
+        print("Do you want to add another location?")
+        print("[1] Yes")
+        print("[2] No")
+        choice = int(input("Enter choice: "))
+        if choice == 2:
+            break
 
     print("More Information")
     print("Do you want to add social media links?")
@@ -254,13 +251,16 @@ def viewFoodReviewsFromResto(restoId):
     choice = int(input("Enter choice: "))
     if choice == 1:
         print("View by:")
-        print("[1] Date")
+        print("[1] View All")
         print("[2] Search Keyword")
+    
         choice = int(input("Enter choice: "))
         if choice == 1:
             viewFoodReviewsForAResto(restoId)
         elif choice == 2:
             viewFoodRevieSearch(restoId)
+       
+        
 
 def viewFoodRevieSearch(restoId):
     keyword = input("Enter Keyword: ")
@@ -1823,13 +1823,38 @@ def updateFoodItem():
     
  #ITO YUNG EDITEDDDD
 def deleteFoodItemAllfoodEstabLoggedInID():
-    cursor.execute("DELETE FROM meat where establishment_id = %s", (foodEstabLoggedInID))
-    cursor.execute("DELETE FROM vegetable where establishment_id = %s", (foodEstabLoggedInID))
-    cursor.execute("DELETE FROM vegetable where establishment_id = %s", (foodEstabLoggedInID))
+    cursor.execute("SELECT * FROM Food WHERE Establishment_id = %s", (foodEstabLoggedInID,))
+    foodItems = cursor.fetchall()
+    for foodItem in foodItems:
+        if foodItem:
+            food_id = foodItem[0]
+            cursor.execute("DELETE FROM Meat WHERE Food_id = %s", (food_id,))
+            mariaDBConnect.commit()
+            cursor.execute("DELETE FROM Fruit WHERE Food_id = %s", (food_id,))
+            mariaDBConnect.commit()
+            cursor.execute("DELETE FROM Vegetable WHERE Food_id = %s", (food_id,))
+            mariaDBConnect.commit()
+            cursor.execute("DELETE FROM Drink WHERE Food_id = %s", (food_id,))
+            mariaDBConnect.commit()
+            cursor.execute("DELETE FROM Food_Ingredient WHERE Food_id = %s", (food_id,))
+            mariaDBConnect.commit()
 
+            cursor.execute("DELETE From is_food_reviewed_by WHERE Food_id = %s", (food_id,))
+            mariaDBConnect.commit()
+            cursor.execute("DELETE FROM Food WHERE Food_id = %s", (food_id,))
+          
+            mariaDBConnect.commit()
+    
 
 
 def deleteFoodItem():
+
+    cursor.execute("SELECT * FROM Food WHERE Establishment_id = %s", (foodEstabLoggedInID,))
+    foodItems = cursor.fetchall()
+    if foodItems == []:
+        print("No food items to delete.")
+        return
+    
     print("Delete Food Item")
     viewFoodItemsForEstab(foodEstabLoggedInID)
 
@@ -1844,8 +1869,13 @@ def deleteFoodItem():
     mariaDBConnect.commit()
     cursor.execute("DELETE FROM Food_Ingredient WHERE Food_id = %s", (food_id,))
     mariaDBConnect.commit()
+
+    cursor.execute("DELETE From is_food_reviewed_by WHERE Food_id = %s", (food_id,))
+    mariaDBConnect.commit()
+    
     cursor.execute("DELETE FROM Food WHERE Food_id = %s", (food_id,))
     mariaDBConnect.commit()
+
     print("Food Item deleted successfully!")
     
 def editRestaurantProfile():
@@ -1858,11 +1888,34 @@ def editRestaurantProfile():
         print("Description:", foodEstabDetails[0][3])
         print("Capacity:", foodEstabDetails[0][4])
         print("Type:", foodEstabDetails[0][5])
+
+        print("Branch Locations")
+        cursor.execute("SELECT * FROM Food_Establishment_Location WHERE Establishment_id = %s", (foodEstabLoggedInID,))
+        locations = cursor.fetchall()
+        for location in locations:
+            print(location[1])
+        
+
+        cursor.execute("SELECT * FROM Food_Establishment_Social_Media_Link WHERE Establishment_id = %s", (foodEstabLoggedInID,))
+        social_media_links = cursor.fetchall()
+        print("Social Media Links:")
+        for social_media_link in social_media_links:
+            print(social_media_link[1])
+        cursor.execute("SELECT * FROM Food_Establishment_Contact WHERE Establishment_id = %s", (foodEstabLoggedInID,))
+        contact_numbers = cursor.fetchall()
+        print("Contact Numbers:")
+        for contact_number in contact_numbers:
+            print(contact_number[1])
+
     print("Choose what to update:")
     print("[1] Name")
     print("[2] Description")
     print("[3] Capacity")
     print("[4] Type")
+    print("[5] Social Media Links")
+    print("[6] Contact Numbers")
+    print("[7] Location")
+
     choice = int(input("Enter choice: "))
     if choice == 1:
         name = input("Enter Name: ")
@@ -1912,6 +1965,17 @@ def deleteRestaurantProfile():
     print("[2] No")
     choice = int(input("Enter choice: "))
     if choice == 1:
+        deleteFoodItemAllfoodEstabLoggedInID()
+        cursor.execute("DELETE from FOOD_ESTABLISHMENT_CONTACT where Establishment_id = %s", (foodEstabLoggedInID,))    
+        mariaDBConnect.commit()
+        cursor.execute("DELETE from FOOD_ESTABLISHMENT_LOCATION where Establishment_id = %s", (foodEstabLoggedInID,))
+        mariaDBConnect.commit()
+        cursor.execute("DELETE from food_establishment_social_media_link where Establishment_id = %s", (foodEstabLoggedInID,))
+        mariaDBConnect.commit()
+
+        cursor.execute("DELETE from is_resto_reviewed_by where Establishment_id = %s", (foodEstabLoggedInID,))
+        mariaDBConnect.commit()
+
         cursor.execute("DELETE FROM Food_Establishment WHERE Establishment_id = %s", (foodEstabLoggedInID,))
         mariaDBConnect.commit()
         print("Restaurant Profile deleted successfully!")
