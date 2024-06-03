@@ -1766,7 +1766,7 @@ def editRestaurantProfile():
         cursor.execute("SELECT * FROM Food_Establishment_Location WHERE Establishment_id = %s", (foodEstabLoggedInID,))
         locations = cursor.fetchall()
         for location in locations:
-            print(location[1])
+            print(location[1], ",", location[2])
         
 
         cursor.execute("SELECT * FROM Food_Establishment_Social_Media_Link WHERE Establishment_id = %s", (foodEstabLoggedInID,))
@@ -1885,7 +1885,7 @@ def editRestaurantProfile():
         cursor.execute("SELECT * FROM Food_Establishment_Location WHERE Establishment_id = %s", (foodEstabLoggedInID,))
         locations = cursor.fetchall()
         for location in locations:
-            print(location[1])
+            print(location[1], ",", location[2])
         print("Choose what to update:")
         print("[1] Add Location")
         print("[2] Delete Location")
