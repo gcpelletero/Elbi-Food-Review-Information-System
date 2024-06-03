@@ -1865,16 +1865,16 @@ def editRestaurantProfile():
         choice = int(input("Enter choice: "))
         if choice == 1:
             contact_number = input("Enter Contact Number: ")
-            cursor.execute("INSERT INTO Food_Establishment_Contact (Establishment_id, Contact_number) VALUES (%s, %s)", (foodEstabLoggedInID, contact_number))
+            cursor.execute("INSERT INTO Food_Establishment_Contact (Establishment_id, Contact) VALUES (%s, %s)", (foodEstabLoggedInID, contact_number))
             mariaDBConnect.commit()
         elif choice == 2:
             contact_number = input("Enter Contact Number to delete: ")
-            cursor.execute("DELETE FROM Food_Establishment_Contact WHERE Establishment_id = %s AND Contact_number = %s", (foodEstabLoggedInID, contact_number))
+            cursor.execute("DELETE FROM Food_Establishment_Contact WHERE Establishment_id = %s AND Contact = %s", (foodEstabLoggedInID, contact_number))
             mariaDBConnect.commit()
         elif choice == 3:
             contact_number = input("Enter Contact Number to edit: ")
             new_contact_number = input("Enter New Contact Number: ")
-            cursor.execute("UPDATE Food_Establishment_Contact SET Contact_number = %s WHERE Establishment_id = %s AND Contact_number = %s", (new_contact_number, foodEstabLoggedInID, contact_number))
+            cursor.execute("UPDATE Food_Establishment_Contact SET Contact_number = %s WHERE Establishment_id = %s AND Contact = %s", (new_contact_number, foodEstabLoggedInID, contact_number))
             mariaDBConnect.commit()
 
         else:
@@ -1911,6 +1911,12 @@ def editRestaurantProfile():
             province = location.split(",")[1]
             cursor.execute("DELETE FROM Food_Establishment_Location WHERE Establishment_id = %s AND City = %s AND Province = %s", (foodEstabLoggedInID, city, province))
             mariaDBConnect.commit()
+        elif choice == 3:
+            city = input("Enter City to edit: ")
+            province = input("Enter Province to edit: ")
+            new_city = input("Enter New City: ")
+            new_province = input("Enter New Province: ")
+            cursor.execute("UPDATE Food_Establishment_Location SET City = %s, Province = %s WHERE Establishment_id = %s AND City = %s AND Province = %s", (new_city, new_province, foodEstabLoggedInID, city, province))
 
     else:
         print("Invalid choice. Please try again.")
