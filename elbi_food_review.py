@@ -1777,7 +1777,7 @@ def updateTypeRelatedDetails(food_id):
         print("Invalid choice. Please try again.")
         updateTypeRelatedDetails(food_id)
     
-    editagain = input("Do you want to edit again?")
+    print("Do you want to edit again?")
     print("[1] Yes")
     print("[2] No")
     if editagain == 1:
@@ -1821,7 +1821,14 @@ def updateFoodItem():
         print("Invalid choice. Please try again.")
         updateFoodItem()
     
- 
+ #ITO YUNG EDITEDDDD
+def deleteFoodItemAllfoodEstabLoggedInID():
+    cursor.execute("DELETE FROM meat where establishment_id = %s", (foodEstabLoggedInID))
+    cursor.execute("DELETE FROM vegetable where establishment_id = %s", (foodEstabLoggedInID))
+    cursor.execute("DELETE FROM vegetable where establishment_id = %s", (foodEstabLoggedInID))
+
+
+
 def deleteFoodItem():
     print("Delete Food Item")
     viewFoodItemsForEstab(foodEstabLoggedInID)
