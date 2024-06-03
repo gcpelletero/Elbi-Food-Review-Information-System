@@ -984,11 +984,15 @@ def editComments():
             cursor.execute("UPDATE is_food_reviewed_by SET Rating = %s WHERE Username = %s AND Food_id = %s AND establishment_id  = %s", (newRating, userLoggedInUserName, food_id, estab_id))
             mariaDBConnect.commit()
 
+            print("Edited comment.")
+
         if choice == 2:
             food_id = int(input("Enter Food ID to delete comment: "))
             estab_id = int(input("Enter Establishment ID to delete comment: "))
             cursor.execute("DELETE FROM is_food_reviewed_by WHERE Username = %s AND Food_id = %s AND establishment_id = %s", (userLoggedInUserName, food_id, estab_id))
             mariaDBConnect.commit()
+
+            print("Deleted comment.")
 
     elif choice == 2:
         cursor.execute("SELECT * FROM is_resto_reviewed_by WHERE Username = %s", (userLoggedInUserName,))
@@ -1008,10 +1012,12 @@ def editComments():
             newRating = float(input("Enter new Rating: "))
             cursor.execute("UPDATE is_resto_reviewed_by SET Rating = %s WHERE Username = %s AND Establishment_id = %s", (newRating, userLoggedInUserName, establishment_id))
             mariaDBConnect.commit()
+            print("Edited comment.")
         if choice == 2:
             establishment_id = int(input("Enter Establishment ID to delete comment: "))
             cursor.execute("DELETE FROM is_resto_reviewed_by WHERE Username = %s AND Establishment_id = %s", (userLoggedInUserName, establishment_id))
             mariaDBConnect.commit()
+            print("Deleted comment.")
     else:
         print("Invalid choice. Please try again.")
         editComments()     
